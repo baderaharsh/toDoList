@@ -1,5 +1,4 @@
-//jshint esversion:6
-
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -12,7 +11,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb+srv://admin-harsh:dotdedsec@cluster0-zvbju.mongodb.net/todolistDB",{useNewUrlParser:true,useUnifiedTopology:true});
+mongoose.connect(process.env.MONGO,{useNewUrlParser:true,useUnifiedTopology:true});
 
 const itemSchema = {
   name: String
@@ -31,14 +30,6 @@ const item2 = new Item({
 const item3 = new Item({
   name: "<-- Hit this button to delete the item"
 });
-
-// Item.insertMany([item1,item2,item3], function(err){
-//     if(err){
-//       console.log(err);
-//     }else{
-//       console.log("Successfully Inserted data into Database");
-//     }
-// });
 
 app.get("/", function(req, res) {
   Item.find(function(err,items){
@@ -94,14 +85,6 @@ app.post("/delete", function(req,res){
       }
 
     })
-    // List.deleteOne({_id:id}, function(err){
-    //   if(err){
-    //     console.log(err);
-    //   }
-    //     else{
-    //       res.redirect("/"+listName);
-    //     }
-    //   })
   }
 })
 
@@ -151,5 +134,5 @@ if (port == null || port == "") {
 }
 
 app.listen(port, function() {
-  console.log("Server has started Successfully");
+  console.log("Server running on port "+port);
 });
